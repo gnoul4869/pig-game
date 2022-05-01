@@ -56,7 +56,7 @@ main {
     margin-bottom: 1rem;
 }
 
-.score {
+.temp-score {
     font-size: 8rem;
     font-weight: 300;
     color: #c7365f;
@@ -69,7 +69,7 @@ main {
 .player-active .name {
     font-weight: 700;
 }
-.player-active .score {
+.player-active .temp-score {
     font-weight: 400;
 }
 
@@ -88,14 +88,14 @@ main {
     transition: all 0.75s;
 }
 
-.current-label {
+.main-label {
     text-transform: uppercase;
     margin-bottom: 1rem;
     font-size: 1.7rem;
     color: #ddd;
 }
 
-.current-score {
+.main-score {
     font-size: 3.5rem;
 }
 

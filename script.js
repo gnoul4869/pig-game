@@ -1,13 +1,58 @@
 'use strict';
 
 // Initial values
-let score1 = 0;
-let score2 = 0;
+const tempScores = {
+    player1: 0,
+    player2: 0,
+    reset: function () {
+        this.player1 = 0;
+        this.player2 = 0;
+    },
+};
+const mainScores = {
+    player1: 0,
+    player2: 0,
+    reset: function () {
+        this.player1 = 0;
+        this.player2 = 0;
+    },
+};
 let isPlayerOne = true;
 
 // Selecting main elements
-const scoreD1 = document.querySelector('#score-1');
-const scoreD2 = document.querySelector('#score-2');
+const tempScoresDOM = {
+    player1: document.querySelector('#temp-score-1'),
+    player2: document.querySelector('#temp-score-2'),
+    reset: function () {
+        this.player1.textContent = 0;
+        this.player2.textContent = 0;
+    },
+};
+const mainScoresDOM = {
+    player1: document.querySelector('#main-score-1'),
+    player2: document.querySelector('#main-score-2'),
+    reset: function () {
+        this.player1.textContent = 0;
+        this.player2.textContent = 0;
+    },
+};
+const playersDOM = {
+    player1: document.querySelector('.player-1'),
+    player2: document.querySelector('.player-2'),
+    switch: function () {
+        if (isPlayerOne) {
+            this.reset();
+        } else {
+            this.player1.classList.remove('player-active');
+            this.player2.classList.add('player-active');
+        }
+    },
+    reset: function () {
+        this.player1.classList.add('player-active');
+        this.player2.classList.remove('player-active');
+    },
+};
+
 const dice = document.querySelector('.dice');
 
 // Selecting buttons
@@ -15,15 +60,42 @@ const btnNew = document.querySelector('.btn-new');
 const btnRoll = document.querySelector('.btn-roll');
 const btnHold = document.querySelector('.btn-hold');
 
-// Small functions
-const setScore = (score) => {
-    if (isPlayerOne) {
-        score1 = score;
-        scoreD1.textContent = score;
-    } else {
-        score2 = score;
-        scoreD2.textContent = score;
+// Utility functions
+const resetTempScores = () => {
+    tempScores.reset();
+    tempScoresDOM.reset();
+};
+
+const resetMainScores = () => {
+    mainScores.reset();
+    mainScoresDOM.reset();
+};
+
+const setTempScore = (score) => {
+    const player = isPlayerOne ? 'player1' : 'player2';
+    tempScores[player] += score;
+    tempScoresDOM[player].textContent = tempScores[player];
+};
+
+const setMainScore = () => {
+    const player = isPlayerOne ? 'player1' : 'player2';
+    mainScores[player] += tempScores[player];
+    mainScoresDOM[player].textContent = mainScores[player];
+
+    checkWinner();
+};
+
+const checkWinner = () => {
+    const player = isPlayerOne ? 'player1' : 'player2';
+    if (mainScores[player] >= 100) {
+        alert(`Player ${isPlayerOne ? 1 : 2} won!`);
+        start();
     }
+};
+
+const switchPlayer = () => {
+    isPlayerOne = !isPlayerOne;
+    playersDOM.switch();
 };
 
 // Roll dice
@@ -34,20 +106,28 @@ btnRoll.addEventListener('click', () => {
     dice.src = `assets/dice-${diceNumber}.png`;
 
     if (diceNumber === 1) {
-        if (isPlayerOne) {
-            setScore(0);
-            isPlayerOne = false;
-        } else {
-            setScore(0);
-            isPlayerOne = true;
-        }
+        const player = isPlayerOne ? 'player1' : 'player2';
+        tempScores[player] = 0;
+        tempScoresDOM[player].textContent = 0;
+        switchPlayer();
+        return;
     }
+
+    setTempScore(diceNumber);
+});
+
+// Hold score
+btnHold.addEventListener('click', () => {
+    setMainScore();
+    resetTempScores();
+    switchPlayer();
 });
 
 // Starting game
 const start = () => {
-    scoreD1.textContent = 0;
-    scoreD2.textContent = 0;
+    resetTempScores();
+    resetMainScores();
+    playersDOM.reset();
     dice.classList.add('hidden');
 };
 
