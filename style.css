@@ -95,7 +95,7 @@ main {
     color: #ddd;
 }
 
-.main-score {
+.score {
     font-size: 3.5rem;
 }
 
@@ -168,4 +168,15 @@ main {
 
 .hidden {
     display: none;
+}
+
+.announcement {
+    position: fixed;
+    z-index: 1;
+    top: 12%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #eee;
+    font-size: 3rem;
+    text-transform: uppercase;
 }
